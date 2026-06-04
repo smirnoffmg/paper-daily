@@ -1,0 +1,40 @@
+[project]
+name = "paper-daily"
+version = "0.1.0"
+description = "Раз в день доставляет одну свежую статью по ML/DS/AI в Telegram-канал."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic-settings>=2.0",
+    "requests>=2.31",
+    "python-telegram-bot>=20.0",
+    "sentence-transformers>=3.0",
+    "python-dotenv>=1.0",
+    "tenacity>=8.0",
+]
+
+[project.scripts]
+paper-daily = "main:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov",
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "pre-commit>=4.6.0",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.mypy]
+strict = true
+ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
