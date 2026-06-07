@@ -15,7 +15,6 @@ class Settings(BaseSettings):
     top_k: int = 30
     model_name: str = "allenai/specter2_base"
     abstract_max_chars: int = 800
-    s2_api_key: str | None = None
 
     @field_validator("paper_queries", "paper_venues", mode="before")
     @classmethod

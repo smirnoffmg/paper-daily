@@ -87,7 +87,6 @@ def fetch_papers(
     queries: list[str],
     candidates_per_query: int,
     venues: list[str],
-    s2_api_key: str | None,  # noqa: ARG001 — kept for interface compatibility
 ) -> list[dict[str, object]]:
     current_year = datetime.date.today().year
 

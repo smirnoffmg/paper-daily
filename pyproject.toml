@@ -7,7 +7,6 @@ requires-python = ">=3.12"
 dependencies = [
     "pydantic-settings>=2.0",
     "requests>=2.31",
-    "python-telegram-bot>=20.0",
     "sentence-transformers>=3.0",
     "python-dotenv>=1.0",
     "tenacity>=8.0",

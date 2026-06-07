@@ -13,9 +13,7 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(messag
 
 def main() -> None:
     cfg = Settings()
-    papers = fetch_papers(
-        cfg.paper_queries, cfg.candidates_per_query, cfg.paper_venues, cfg.s2_api_key
-    )
+    papers = fetch_papers(cfg.paper_queries, cfg.candidates_per_query, cfg.paper_venues)
     if not papers:
         raise SystemExit("No papers found — check your queries or API key")
     model = load_model(cfg.model_name)
