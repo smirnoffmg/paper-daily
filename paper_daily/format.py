@@ -13,7 +13,7 @@ def _to_hashtag(topic: str) -> str:
 def format_message(paper: dict[str, object], abstract_max_chars: int = 800) -> str:
     title = str(paper.get("title") or "Untitled")
     year = str(paper.get("year") or "")
-    venue = str(paper.get("venue") or "") or "arXiv"
+    venue = str(paper.get("venue") or "")
     paper_id = str(paper.get("paperId") or "")
     abstract = str(paper.get("abstract") or "")
 
@@ -27,14 +27,14 @@ def format_message(paper: dict[str, object], abstract_max_chars: int = 800) -> s
     oa_url = f"https://openalex.org/{paper_id}" if paper_id else ""
 
     year_part = f" ({_esc(year)})" if year else ""
-    lines = [
+    lines: list[str] = [
         f"📄 <b>{_esc(title)}</b>",
         "",
         f"👥 {_esc(authors_str)}{year_part}",
-        f"🏛 {_esc(venue)}",
-        "",
-        _esc(abstract),
     ]
+    if venue:
+        lines.append(f"🏛 {_esc(venue)}")
+    lines += ["", _esc(abstract)]
     if oa_url:
         lines += ["", f'🔗 <a href="{oa_url}">Open in OpenAlex</a>']
 

@@ -21,10 +21,10 @@ def test_abstract_not_truncated_when_short() -> None:
     assert "…" not in msg
 
 
-def test_missing_venue_defaults_to_arxiv() -> None:
+def test_missing_venue_omits_venue_line() -> None:
     paper = dict(_PAPER, venue=None)
     msg = format_message(paper, abstract_max_chars=800)
-    assert "arXiv" in msg
+    assert "🏛" not in msg
 
 
 def test_url_present() -> None:

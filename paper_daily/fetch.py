@@ -15,7 +15,6 @@ from tenacity import (
 logger = logging.getLogger(__name__)
 
 _OA_WORKS = "https://api.openalex.org/works"
-_MAILTO = "smirnoffmg@gmail.com"
 _INTER_QUERY_DELAY = 1.0
 
 
@@ -33,8 +32,8 @@ def _is_rate_limit(exc: BaseException) -> bool:
     stop=stop_after_attempt(5),
     before_sleep=before_sleep_log(logger, logging.WARNING),
 )
-def _get(url: str, params: dict[str, str | int]) -> requests.Response:
-    headers = {"User-Agent": f"paper-daily/0.1 (mailto:{_MAILTO})"}
+def _get(url: str, params: dict[str, str | int], mailto: str) -> requests.Response:
+    headers = {"User-Agent": f"paper-daily/0.1 (mailto:{mailto})"}
     resp = requests.get(url, params=params, headers=headers, timeout=30)
     resp.raise_for_status()
     return resp
@@ -87,6 +86,7 @@ def fetch_papers(
     queries: list[str],
     candidates_per_query: int,
     venues: list[str],
+    mailto: str = "smirnoffmg@gmail.com",
 ) -> list[dict[str, object]]:
     current_year = datetime.date.today().year
 
@@ -109,9 +109,9 @@ def fetch_papers(
                 ),
                 "per-page": per_page,
                 "cursor": cursor,
-                "mailto": _MAILTO,
+                "mailto": mailto,
             }
-            resp = _get(url=_OA_WORKS, params=params)
+            resp = _get(url=_OA_WORKS, params=params, mailto=mailto)
             data = resp.json()
             batch: list[dict[str, Any]] = data.get("results") or []
             if not batch:

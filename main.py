@@ -13,7 +13,9 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(messag
 
 def main() -> None:
     cfg = Settings()
-    papers = fetch_papers(cfg.paper_queries, cfg.candidates_per_query, cfg.paper_venues)
+    papers = fetch_papers(
+        cfg.paper_queries, cfg.candidates_per_query, cfg.paper_venues, cfg.openalex_email
+    )
     if not papers:
         raise SystemExit("No papers found — check your queries or API key")
     model = load_model(cfg.model_name)
@@ -21,7 +23,10 @@ def main() -> None:
     ranked = rank_papers(papers, model, profile)
     paper = select_paper(ranked, top_k=cfg.top_k)
     text = format_message(paper, cfg.abstract_max_chars)
-    post_message(cfg.telegram_token, cfg.telegram_chat_id, text)
+    if cfg.dry_run:
+        print(text)
+    else:
+        post_message(cfg.telegram_token, cfg.telegram_chat_id, text)
 
 
 if __name__ == "__main__":
