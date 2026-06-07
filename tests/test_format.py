@@ -54,3 +54,16 @@ def test_authors_joined() -> None:
 def test_year_in_message() -> None:
     msg = format_message(_PAPER, abstract_max_chars=800)
     assert "2017" in msg
+
+
+def test_hashtags_appended() -> None:
+    paper = dict(_PAPER, topics=["Machine Learning", "Neural Networks"])
+    msg = format_message(paper)
+    assert "#machine_learning" in msg
+    assert "#neural_networks" in msg
+
+
+def test_no_hashtags_when_topics_empty() -> None:
+    paper = dict(_PAPER, topics=[])
+    msg = format_message(paper)
+    assert msg.count("#") == 0

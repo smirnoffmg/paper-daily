@@ -15,3 +15,10 @@ repos:
         types: [python]
         pass_filenames: false
         args: [paper_daily/, main.py]
+
+      - id: pytest
+        name: pytest
+        entry: uv run pytest
+        language: system
+        pass_filenames: false
+        always_run: true

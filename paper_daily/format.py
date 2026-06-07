@@ -1,5 +1,13 @@
+import re
+
+
 def _esc(text: str) -> str:
     return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def _to_hashtag(topic: str) -> str:
+    slug = re.sub(r"[^a-z0-9_]", "", topic.lower().replace(" ", "_").replace("-", "_"))
+    return f"#{slug}" if slug else ""
 
 
 def format_message(paper: dict[str, object], abstract_max_chars: int = 800) -> str:
@@ -29,5 +37,10 @@ def format_message(paper: dict[str, object], abstract_max_chars: int = 800) -> s
     ]
     if oa_url:
         lines += ["", f'🔗 <a href="{oa_url}">Open in OpenAlex</a>']
+
+    topics: list[str] = paper.get("topics", [])  # type: ignore[assignment]
+    tags = [t for topic in topics if (t := _to_hashtag(str(topic)))]
+    if tags:
+        lines += ["", " ".join(tags)]
 
     return "\n".join(lines)

@@ -69,6 +69,9 @@ def _work_to_paper(work: dict[str, Any]) -> dict[str, object]:
     source: dict[str, Any] = primary_location.get("source") or {}
     venue = str(source.get("display_name") or "")
 
+    raw_topics: list[dict[str, Any]] = work.get("topics") or []
+    topics = [str(t["display_name"]) for t in raw_topics[:5] if t.get("display_name")]
+
     return {
         "paperId": paper_id,
         "title": str(work.get("title") or ""),
@@ -76,6 +79,7 @@ def _work_to_paper(work: dict[str, Any]) -> dict[str, object]:
         "authors": authors,
         "year": work.get("publication_year"),
         "venue": venue,
+        "topics": topics,
     }
 
 
@@ -102,7 +106,7 @@ def fetch_papers(
                 "search": query,
                 "filter": f"publication_year:{current_year},type:article,open_access.is_oa:true",
                 "select": (
-                    "id,title,abstract_inverted_index,authorships,publication_year,primary_location"
+                    "id,title,abstract_inverted_index,authorships,publication_year,primary_location,topics"
                 ),
                 "per-page": per_page,
                 "cursor": cursor,
